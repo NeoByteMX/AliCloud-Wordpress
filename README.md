@@ -227,6 +227,9 @@ Tu correo electrónico: Para notificaciones y recuperación de contraseña.
 
 Haz clic en "Instalar WordPress" y, en unos segundos, ¡tu sitio estará listo!
 
+<img width="884" height="914" alt="image" src="https://github.com/user-attachments/assets/ee2abccd-1631-464d-8859-cf29d9ee5a5b" />
+
+
 # ¡Felicidades! 🎉
 Has desplegado exitosamente un sitio de WordPress en Alibaba Cloud. Ahora puedes iniciar sesión en tu panel de administración (http://TU_IP_PÚBLICA/wp-admin) y empezar a crear contenido.
 
