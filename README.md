@@ -60,6 +60,20 @@ You can see your instance Public IP (I'm using and EIP but doesn't matter)
 The command you will need is `SSH root@YOUR_IP`, once you enter this it will ask you for your fingerprint, type yes, and then type your password (that you use to create your ECS).
 
 After logging on to the ECS with SSH, run the apt update command to update apt source: 
-'''apt update'''
+`` apt update ``
+<img width="960" height="480" alt="image" src="https://github.com/user-attachments/assets/108bd37e-ec4d-439c-aa5e-1b7ef6d97cbc" />
+
+Install the MySQL service and client:
+`` apt install -y mysql-server mysql-client ``
+<img width="960" height="480" alt="image" src="https://github.com/user-attachments/assets/38bb01c7-80fa-42a0-ba86-378faef43e19" />
+
+During installation, you will be prompted to enter a password for MySQL. Memorize this password, because later it will be used for connecting to MySQL.
+
+Start the MySQL service:
+`` service mysql start ``
+<img width="847" height="64" alt="image" src="https://github.com/user-attachments/assets/40bf695e-e89c-44f7-9342-db0136947fb6" />
+`` mysql -uroot -p ``
+<img width="842" height="241" alt="image" src="https://github.com/user-attachments/assets/e041f611-63d9-42e8-bbfb-247dcec6176d" />
+
 
 I hope this quick tutorial helps you!
