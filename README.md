@@ -1,3 +1,24 @@
+# Despliega WordPress en Alibaba Cloud con ECS
+
+¡Hola! 👋 Este es un tutorial paso a paso para crear tu propio sitio de WordPress desde cero en **Alibaba Cloud**, aprovechando su prueba gratuita del servicio **Elastic Compute Service (ECS)**.
+
+## Prerrequisitos
+
+* Una cuenta de Alibaba Cloud.
+* Un método de pago válido (necesario para activar la prueba gratuita, no se te cobrará nada).
+
+---
+
+## 1. Creación de la Instancia ECS (Prueba Gratuita)
+
+Lo primero es activar la prueba gratuita y configurar nuestra máquina virtual (instancia).
+
+1.  **Ve a la página de la prueba gratuita:** [Alibaba Cloud Free Trial](https://www.alibabacloud.com/es/free).
+2.  Busca y selecciona la opción **Elastic Compute Service (ECS)**. Generalmente ofrecen una instancia `t5` o `ecs.t6-c1m1.large` de 1 CPU y 1 GB de RAM por 1 año. Haz clic en **"Probar ahora"**.
+
+    ![Imagen de la página de selección de prueba gratuita de Alibaba Cloud](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/b62bc5d5-7a6c-4a50-b37b-2d2508313ea9)
+
+
 # AliCloud-Wordpress
 Tutorial about how to create your WordPress site on Alibaba Cloud using their free trial.
 
