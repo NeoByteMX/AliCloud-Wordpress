@@ -59,5 +59,7 @@ You can see your instance Public IP (I'm using and EIP but doesn't matter)
 #### SSH
 The command you will need is `SSH root@YOUR_IP`, once you enter this it will ask you for your fingerprint, type yes, and then type your password (that you use to create your ECS).
 
+After logging on to the ECS with SSH, run the apt update command to update apt source: 
+'''apt update'''
 
 I hope this quick tutorial helps you!
