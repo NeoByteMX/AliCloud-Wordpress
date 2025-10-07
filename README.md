@@ -2,6 +2,8 @@
 
 ¡Hola! 👋 Este es un tutorial paso a paso para crear tu propio sitio de WordPress desde cero en **Alibaba Cloud**, aprovechando su prueba gratuita del servicio **Elastic Compute Service (ECS)**.
 
+---
+
 ## Prerrequisitos
 
 * Una cuenta de Alibaba Cloud.
@@ -17,6 +19,55 @@ Lo primero es activar la prueba gratuita y configurar nuestra máquina virtual (
 2.  Busca y selecciona la opción **Elastic Compute Service (ECS)**. Generalmente ofrecen una instancia `t5` o `ecs.t6-c1m1.large` de 1 CPU y 1 GB de RAM por 1 año. Haz clic en **"Probar ahora"**.
 
     ![Imagen de la página de selección de prueba gratuita de Alibaba Cloud](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/b62bc5d5-7a6c-4a50-b37b-2d2508313ea9)
+
+3.  **Configura tu instancia:**
+    * **Región:** Elige la que prefieras. Para este tutorial, usaré **US (Silicon Valley)**.
+    * **Sistema Operativo:** Selecciona **Ubuntu** (usaremos la versión 22.04 LTS). Es muy popular y tiene un gran soporte de la comunidad.
+    * **Autenticación:** Puedes usar una contraseña o un par de claves SSH. Para que sea más sencillo para principiantes, elegiremos **Contraseña Personalizada**. Asegúrate de crear una contraseña fuerte y guárdala en un lugar seguro.
+
+    ![Imagen de las opciones de configuración de la instancia ECS](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/763b7344-612d-494b-9787-a2907a9695fd)
+
+4.  Deja las demás opciones con sus valores por defecto.
+5.  Acepta los términos del servicio y haz clic en **"Create Order"** para finalizar la creación.
+
+---
+
+## 2. Conexión a la Instancia vía SSH
+
+Una vez creada la instancia, necesitamos conectarnos a ella para empezar a instalar todo.
+
+1.  Ve a la [Consola de Alibaba Cloud](https://ecs.console.aliyun.com/home).
+2.  En el menú de la izquierda, navega a **Instances & Images** > **Instances**.
+3.  Asegúrate de estar en la región correcta. Verás tu nueva instancia en estado "Running".
+4.  Localiza y copia la **Dirección IP Pública** (`Public IP Address`) de tu instancia.
+
+    ![Imagen del panel de control de la instancia ECS mostrando la IP Pública](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/e2e3a9db-02f0-47b1-89d5-e3f0847c2aba)
+
+5.  Abre una terminal en tu computadora (Terminal en macOS/Linux o PowerShell/WSL en Windows) y conéctate usando el siguiente comando. Reemplaza `TU_IP_PÚBLICA` con la IP que copiaste.
+
+    ```bash
+    ssh root@TU_IP_PÚBLICA
+    ```
+
+6.  La primera vez que te conectes, te pedirá confirmar la autenticidad del host. Escribe `yes` y presiona Enter.
+7.  Luego, introduce la contraseña que creaste para la instancia. Si todo es correcto, ¡ya estarás dentro de tu servidor! 💻
+
+---
+
+## 3. Instalación del Servidor Web (LEMP Stack)
+
+Para que WordPress funcione, necesitamos instalar un conjunto de software conocido como "stack LEMP", que consiste en:
+* **L**inux (nuestro sistema operativo Ubuntu).
+* **E**Nginx (nuestro servidor web, se pronuncia "Engine-X").
+* **M**ySQL (nuestra base de datos).
+* **P**HP (el lenguaje en el que está escrito WordPress).
+
+### Actualización de Paquetes
+Primero, actualizamos la lista de paquetes del sistema operativo.
+
+```bash
+apt update
+apt upgrade -y
 
 
 # AliCloud-Wordpress
