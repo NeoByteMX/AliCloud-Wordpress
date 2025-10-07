@@ -233,6 +233,8 @@ Haz clic en "Instalar WordPress" y, en unos segundos, ¡tu sitio estará listo!
 # ¡Felicidades! 🎉
 Has desplegado exitosamente un sitio de WordPress en Alibaba Cloud. Ahora puedes iniciar sesión en tu panel de administración (http://TU_IP_PÚBLICA/wp-admin) y empezar a crear contenido.
 
+<img width="2044" height="1212" alt="image" src="https://github.com/user-attachments/assets/3e310b19-c045-4546-844c-fc7b9609d311" />
+
 Próximos Pasos
 Apuntar un dominio: Compra un dominio y apúntalo a la IP de tu instancia.
 
