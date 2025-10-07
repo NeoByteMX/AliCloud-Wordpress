@@ -70,180 +70,172 @@ apt update
 apt upgrade -y
 ```
 
-# AliCloud-Wordpress
-Tutorial about how to create your WordPress site on Alibaba Cloud using their free trial.
+### Instalación de Nginx, MySQL y PHP
 
-* The first think you need of course is an account, create your and then follow me.
+Ahora instalamos todo el software necesario con un solo comando. Usaremos PHP 8.1, que es una versión moderna y segura.
+```bash
+apt install -y nginx mysql-server php8.1-fpm php8.1-mysql
+```
 
-## Creating the free trial.
+### Configuración de la Base de Datos
+WordPress necesita una base de datos para guardar toda la información de tu sitio (publicaciones, usuarios, configuraciones, etc.).
 
-Once you have created your account and added a card, is time to use the free trial. Go to https://www.alibabacloud.com/en/free?_p_lc=1&TargetUserType=for-enterprise
+Inicia el servicio de MySQL.
 
-And select the ECS t5 Instance (1C1G 1 Year).
+```Bash
+service mysql start
+```
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/b62bc5d5-7a6c-4a50-b37b-2d2508313ea9)
+Accede a la consola de MySQL. Te pedirá la contraseña de root que configuraste durante la instalación.
 
+```Bash
+mysql -uroot -p
+```
 
-1. Select your region, I'll choose US(Silicon Valley)
+Crea la base de datos para WordPress.
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/81d3a864-b273-4ab3-adfc-6bc28b867e9f)
+```SQL
+CREATE DATABASE wordpress;
+```
 
-2. Select your OS, I'll choose Ubuntu as is the most popular
+Sal de la consola de MySQL.
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/c3f34454-1c21-4805-bdbc-2811901ff7b3)
+```SQL
+exit;
+```
 
-3. You can select your Customer Password or use a Key Pair, I'll use a custom password as is beginner-friendly.
+## 4. Instalación y Configuración de WordPress
+¡Es hora de descargar y preparar WordPress!
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/763b7344-612d-494b-9787-a2907a9695fd)
+Descarga la última versión de WordPress directamente desde su sitio oficial. Este enlace siempre apunta al archivo más reciente.
 
-Let the other things as default (or you can't use the free trial)
+```Bash
+wget [https://wordpress.org/latest.tar.gz](https://wordpress.org/latest.tar.gz)
+```
+Descomprime el archivo en el directorio /var/www/, que es donde Nginx busca los sitios web por defecto.
 
-Then select the box ECS Terms of Service | Product Terms of Service and create order.
+```Bash
+tar -xzvf latest.tar.gz -C /var/www/
+```
 
-## Login in through SSH
-After creating your ECS free trial, go to your Console.
+Dale a Nginx los permisos necesarios sobre los archivos de WordPress.
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/3ad9587a-d6ec-4c9b-bee0-3a67a8d057ff)
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/f8db298c-6ae3-476c-aeae-d81df57f67ab)
+```Bash
+chown -R www-data:www-data /var/www/wordpress
+```
 
-And go to ECS
+Crea el archivo de configuración de WordPress a partir del archivo de ejemplo.
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/307b7211-ef22-4be6-a3be-ee7e3c83f723)
+```Bash
+cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
+```
 
-This is the direct link: https://ecs.console.aliyun.com/home
+Ahora, edita el archivo de configuración para conectar WordPress con la base de datos que creamos. Puedes usar nano o vim.
 
-We can see one running ECS instance in the region which you set, in my case US (silicon Valley)
+```Bash
+nano /var/www/wordpress/wp-config.php
+```
 
+Busca las siguientes líneas y modifícalas con tus datos:
 
+DB_NAME: 'wordpress'
 
-Select "instances" in the left menu bar:
+DB_USER: 'root'
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/9aeceafa-c51d-4208-9d33-0a8fa160db0a)
+DB_PASSWORD: 'la_contraseña_que_pusiste_para_mysql'
 
-You will see again your instance (check your region)
+```PHP
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wordpress' );
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/8d50a487-a14e-48b8-b0f2-3fc527858d4a)
+/** Database username */
+define( 'DB_USER', 'root' );
 
-You can see your instance Public IP (I'm using and EIP but doesn't matter)
+/** Database password */
+define( 'DB_PASSWORD', 'tu_contraseña_de_mysql' );
+```
 
-![image](https://github.com/NeoByteMX/AliCloud-Wordpress/assets/86810793/e2e3a9db-02f0-47b1-89d5-e3f0847c2aba)
+Guarda los cambios y cierra el editor (en nano, es Ctrl+X, luego Y, y Enter).
 
-#### SSH
-The command you will need is `SSH root@YOUR_IP`, once you enter this it will ask you for your fingerprint, type yes, and then type your password (that you use to create your ECS).
+## 5. Configuración de Nginx para WordPress
+El último paso en la terminal es decirle a Nginx cómo servir nuestro sitio de WordPress.
 
-After logging on to the ECS with SSH, run the apt update command to update apt source: 
-`` apt update ``
-<img width="960" height="480" alt="image" src="https://github.com/user-attachments/assets/108bd37e-ec4d-439c-aa5e-1b7ef6d97cbc" />
+(Opcional pero recomendado) Haz una copia de seguridad del archivo de configuración por defecto.
 
-Install the MySQL service and client:
-`` apt install -y mysql-server mysql-client ``
-<img width="960" height="480" alt="image" src="https://github.com/user-attachments/assets/38bb01c7-80fa-42a0-ba86-378faef43e19" />
+```Bash
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+```
 
-During installation, you will be prompted to enter a password for MySQL. Memorize this password, because later it will be used for connecting to MySQL.
+Edita el archivo de configuración de Nginx.
 
-Start the MySQL service:
-`` service mysql start ``
+```Bash
+nano /etc/nginx/sites-available/default
+```
 
-<img width="847" height="64" alt="image" src="https://github.com/user-attachments/assets/40bf695e-e89c-44f7-9342-db0136947fb6" />
+Borra todo el contenido y reemplázalo con la siguiente configuración. Importante: Fíjate en la línea fastcgi_pass, que ahora apunta a php8.1-fpm.sock.
 
-Enter the following command, and then enter the password you set when installing the MySQL service. A successful logon represents a successful installation:
-`` mysql -uroot -p ``
-
-<img width="842" height="241" alt="image" src="https://github.com/user-attachments/assets/e041f611-63d9-42e8-bbfb-247dcec6176d" />
-
-When you are logged on, create a WordPress database in MySQL:
-``CREATE DATABASE wordpress; ``
-Exit MySQL:
-`` exit; ``
-
-Install the Nginx, PHP 7.0-FPM, and PHP 7.0-MySQL packages:
-`` apt install -y nginx php7.0-fpm php7.0-mysql ``
-
-<img width="834" height="665" alt="image" src="https://github.com/user-attachments/assets/5b8ab46f-8bee-4c0a-a7b0-c5452ba33254" />
-
-Start the Nginx Web service:
-`` service nginx restart ``
-
-When Nginx is started, enter the EIP bound to the ECS in your browser, and the following screen appears:
-<img width="571" height="215" alt="image" src="https://github.com/user-attachments/assets/4d41f8c8-ed52-4def-bd3d-699e9a62803c" />
-
-4 Download the WordPress installation package
-Download the WordPress installation package:
-`` wget https://labex-ali-data.oss-us-west-1.aliyuncs.com/wordpress/wordpress-6.1.1.tar.gz ``
-
-<img width="1590" height="196" alt="image" src="https://github.com/user-attachments/assets/10ba0e3f-2b94-488a-a897-6c98fe196387" />
-
-Unzip the WordPress installation package to the /var/www directory.
-`` tar -xzf wordpress-6.1.1.tar.gz -C /var/www/ ``
-
-Change the directory permission to www-data users and user groups.
-`` chown -R www-data:www-data /var/www ``
-
-5. Modify the Nginx configuration file
-Before editing an important configuration file, it is best to back up the file in advance to prevent the error operation can not be restored:
-`` cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak ``
-
-Using vim to edit and modify the Nginx configuration file /etc/nginx/sites-available/default as follows:
-`` vim /etc/nginx/sites-available/default ``
+```Nginx
 
 server {
     listen 80;
     root /var/www/wordpress;
     index index.php index.html index.htm;
-
+    server_name TU_IP_PÚBLICA; # O tu dominio si ya tienes uno
 
     location / {
-        try_files $uri $uri/ /index.php?q=$uri&$args;
-    }
-
-    error_page 404 /404.html;
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
-        root /usr/share/nginx/www;
+        try_files $uri $uri/ /index.php?$args;
     }
 
     location ~ \.php$ {
-        try_files $uri =404;
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+    }
 
-        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-        fastcgi_index index.php;
-        include /etc/nginx/fastcgi_params;
-          include /etc/nginx/fastcgi.conf;
+    location ~ /\.ht {
+        deny all;
     }
 }
+```
 
+Guarda y cierra el archivo.
 
-Go to the /var/www/wordpress directory, copy wp-config-sample.php to wp-config.php, and then modify wp-config.php with vim:
+Reinicia los servicios de Nginx y PHP para que los cambios surtan efecto.
 
-`` cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php ``
+```Bash
+service nginx restart
+service php8.1-fpm restart
+```
 
-`` vim /var/www/wordpress/wp-config.php ``
+## 6. Finalizar la Instalación desde el Navegador
+¡Lo lograste! La configuración en el servidor está completa. Ahora solo queda finalizar la instalación desde la famosa interfaz de WordPress.
 
-Configure the database connection information in the file, as shown in the following figure:
-<img width="840" height="668" alt="image" src="https://github.com/user-attachments/assets/90454686-90a8-49bc-b267-ca159577b31f" />
+Abre tu navegador web y ve a la dirección IP pública de tu instancia:
+http://TU_IP_PÚBLICA
 
-Restart Nginx and PHP 7.0-FPM:
-``service nginx restart``
+Serás recibido por la pantalla de bienvenida de WordPress, donde deberás elegir tu idioma.
 
-``service php7.0-fpm restart``
+Sigue los pasos en pantalla:
 
-6. WordPress welcome screen
-Enter the following address in your browser. Make sure you enter the EIP address for the IP address. If that directs you to the language selection screen, it means that WordPress is installed successfully.
+Título del sitio: El nombre que quieres para tu web.
 
-http://<EIP address>/wp-admin/install.php
-<img width="1151" height="689" alt="image" src="https://github.com/user-attachments/assets/0b37f1e0-5caa-4f10-91e4-046d4a685edc" />
+Nombre de usuario: El nombre de tu usuario administrador (¡no uses "admin"!).
 
-Click Continue to continue setting WordPress:
-<img width="884" height="914" alt="image" src="https://github.com/user-attachments/assets/ee2abccd-1631-464d-8859-cf29d9ee5a5b" />
+Contraseña: Una contraseña fuerte para tu usuario.
 
-In this page, set the title of the WordPress site, the username and password of the site administrator, and the mailbox information.
+Tu correo electrónico: Para notificaciones y recuperación de contraseña.
 
-image desc
-Wordpress site deployment success! Login WordPress Background:
+Haz clic en "Instalar WordPress" y, en unos segundos, ¡tu sitio estará listo!
 
-image desc
-View WordPress Website Page:
+# ¡Felicidades! 🎉
+Has desplegado exitosamente un sitio de WordPress en Alibaba Cloud. Ahora puedes iniciar sesión en tu panel de administración (http://TU_IP_PÚBLICA/wp-admin) y empezar a crear contenido.
 
-image desc
+Próximos Pasos
+Apuntar un dominio: Compra un dominio y apúntalo a la IP de tu instancia.
 
-I hope this quick tutorial helps you!
+Instalar un certificado SSL: Usa Let's Encrypt para añadir HTTPS y asegurar tu sitio.
+
+Explorar temas y plugins: ¡Personaliza tu sitio a tu gusto!
+
+Espero que este tutorial te haya sido de gran ayuda. ¡Mucho éxito con tu proyecto!
+
