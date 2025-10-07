@@ -141,5 +141,37 @@ server {
 }
 
 
+Go to the /var/www/wordpress directory, copy wp-config-sample.php to wp-config.php, and then modify wp-config.php with vim:
+
+`` cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php ``
+
+`` vim /var/www/wordpress/wp-config.php ``
+
+Configure the database connection information in the file, as shown in the following figure:
+<img width="840" height="668" alt="image" src="https://github.com/user-attachments/assets/90454686-90a8-49bc-b267-ca159577b31f" />
+
+Restart Nginx and PHP 7.0-FPM:
+``service nginx restart``
+
+``service php7.0-fpm restart``
+
+6. WordPress welcome screen
+Enter the following address in your browser. Make sure you enter the EIP address for the IP address. If that directs you to the language selection screen, it means that WordPress is installed successfully.
+
+http://<EIP address>/wp-admin/install.php
+<img width="1151" height="689" alt="image" src="https://github.com/user-attachments/assets/0b37f1e0-5caa-4f10-91e4-046d4a685edc" />
+
+Click Continue to continue setting WordPress:
+<img width="884" height="914" alt="image" src="https://github.com/user-attachments/assets/ee2abccd-1631-464d-8859-cf29d9ee5a5b" />
+
+In this page, set the title of the WordPress site, the username and password of the site administrator, and the mailbox information.
+
+image desc
+Wordpress site deployment success! Login WordPress Background:
+
+image desc
+View WordPress Website Page:
+
+image desc
 
 I hope this quick tutorial helps you!
