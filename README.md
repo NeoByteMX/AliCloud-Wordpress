@@ -71,9 +71,75 @@ During installation, you will be prompted to enter a password for MySQL. Memoriz
 
 Start the MySQL service:
 `` service mysql start ``
+
 <img width="847" height="64" alt="image" src="https://github.com/user-attachments/assets/40bf695e-e89c-44f7-9342-db0136947fb6" />
+
+Enter the following command, and then enter the password you set when installing the MySQL service. A successful logon represents a successful installation:
 `` mysql -uroot -p ``
+
 <img width="842" height="241" alt="image" src="https://github.com/user-attachments/assets/e041f611-63d9-42e8-bbfb-247dcec6176d" />
 
+When you are logged on, create a WordPress database in MySQL:
+``CREATE DATABASE wordpress; ``
+Exit MySQL:
+`` exit; ``
+
+Install the Nginx, PHP 7.0-FPM, and PHP 7.0-MySQL packages:
+`` apt install -y nginx php7.0-fpm php7.0-mysql ``
+
+<img width="834" height="665" alt="image" src="https://github.com/user-attachments/assets/5b8ab46f-8bee-4c0a-a7b0-c5452ba33254" />
+
+Start the Nginx Web service:
+`` service nginx restart ``
+
+When Nginx is started, enter the EIP bound to the ECS in your browser, and the following screen appears:
+<img width="571" height="215" alt="image" src="https://github.com/user-attachments/assets/4d41f8c8-ed52-4def-bd3d-699e9a62803c" />
+
+4 Download the WordPress installation package
+Download the WordPress installation package:
+`` wget https://labex-ali-data.oss-us-west-1.aliyuncs.com/wordpress/wordpress-6.1.1.tar.gz ``
+
+<img width="1590" height="196" alt="image" src="https://github.com/user-attachments/assets/10ba0e3f-2b94-488a-a897-6c98fe196387" />
+
+Unzip the WordPress installation package to the /var/www directory.
+`` tar -xzf wordpress-6.1.1.tar.gz -C /var/www/ ``
+
+Change the directory permission to www-data users and user groups.
+`` chown -R www-data:www-data /var/www ``
+
+5. Modify the Nginx configuration file
+Before editing an important configuration file, it is best to back up the file in advance to prevent the error operation can not be restored:
+`` cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak ``
+
+Using vim to edit and modify the Nginx configuration file /etc/nginx/sites-available/default as follows:
+`` vim /etc/nginx/sites-available/default ``
+
+`` server {
+    listen 80;
+    root /var/www/wordpress;
+    index index.php index.html index.htm;
+
+
+    location / {
+        try_files $uri $uri/ /index.php?q=$uri&$args;
+    }
+
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/www;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+        fastcgi_index index.php;
+        include /etc/nginx/fastcgi_params;
+          include /etc/nginx/fastcgi.conf;
+    }
+}
+
+``
 
 I hope this quick tutorial helps you!
