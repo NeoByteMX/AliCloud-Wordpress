@@ -240,5 +240,4 @@ Instalar un certificado SSL: Usa Let's Encrypt para añadir HTTPS y asegurar tu 
 
 Explorar temas y plugins: ¡Personaliza tu sitio a tu gusto!
 
-Espero que este tutorial te haya sido de gran ayuda. ¡Mucho éxito con tu proyecto!
-
+Espero que este tutorial te haya sido de gran ayuda. ¡Te deseo mucho éxito!
