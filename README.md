@@ -114,7 +114,7 @@ Before editing an important configuration file, it is best to back up the file i
 Using vim to edit and modify the Nginx configuration file /etc/nginx/sites-available/default as follows:
 `` vim /etc/nginx/sites-available/default ``
 
-`` server {
+server {
     listen 80;
     root /var/www/wordpress;
     index index.php index.html index.htm;
@@ -140,6 +140,6 @@ Using vim to edit and modify the Nginx configuration file /etc/nginx/sites-avail
     }
 }
 
-``
+
 
 I hope this quick tutorial helps you!
