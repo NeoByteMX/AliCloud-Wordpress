@@ -68,7 +68,7 @@ Primero, actualizamos la lista de paquetes del sistema operativo.
 ```bash
 apt update
 apt upgrade -y
-
+```
 
 # AliCloud-Wordpress
 Tutorial about how to create your WordPress site on Alibaba Cloud using their free trial.
